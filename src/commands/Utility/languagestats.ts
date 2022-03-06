@@ -80,7 +80,7 @@ const command: Command = {
 			footer: { text: generateTip(getString), iconURL: interaction.member.displayAvatarURL({ extension: "png" }) },
 		})
 		if (hypixelData) {
-			embed.addField({
+			embed.addFields({
 				name: "Hypixel",
 				value: `${getString("translated", {
 					variables: {
@@ -98,7 +98,7 @@ const command: Command = {
 			})
 		}
 		if (quickplayData) {
-			embed.addField({
+			embed.addFields({
 				name: "Quickplay",
 				value: `${getString("translated", {
 					variables: {
@@ -116,7 +116,7 @@ const command: Command = {
 			})
 		}
 		if (sbaData) {
-			embed.addField({
+			embed.addFields({
 				name: "SkyblockAddons",
 				value: `${getString("translated", {
 					variables: {
@@ -134,7 +134,7 @@ const command: Command = {
 			})
 		}
 		if (botData) {
-			embed.addField({
+			embed.addFields({
 				name: "Hypixel Translators Bot",
 				value: `${getString("translated", {
 					variables: {

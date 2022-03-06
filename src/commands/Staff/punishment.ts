@@ -573,7 +573,7 @@ const command: Command = {
 							: punish.type === "WARN"
 							? new Date(punish.timestamp).setDate(new Date(punish.timestamp).getDate() + 7)
 							: new Date(punish.endTimestamp!).setDate(new Date(punish.endTimestamp!).getDate() + 30)
-				embed.addField({
+				embed.addFields({
 					name: `Case ${punish.case}: ${punish.endTimestamp ? durationString : ""}${punish.type} (${punish.points} points)`,
 					value: `${
 						typeof punish.duration === "number" ? (punish.duration ? `Ends <t:${Math.round(punish.endTimestamp! / 1000)}:R>\n` : "Never ends\n") : ""
@@ -604,7 +604,7 @@ const command: Command = {
 						: punish.type === "WARN"
 						? new Date(punish.timestamp).setDate(new Date(punish.timestamp).getDate() + 7)
 						: new Date(punish.endTimestamp!).setDate(new Date(punish.endTimestamp!).getDate() + 30)
-				embed.addField({
+				embed.addFields({
 					name: `Case ${punish.case}: ${
 						punish.endTimestamp ? (punish.duration ? `${punish.duration}${punish.type === "BAN" ? "d" : "h"} ` : "permanent ") : ""
 					}${punish.type} (${punish.points} points)`,
@@ -639,7 +639,7 @@ const command: Command = {
 							: punish.type === "WARN"
 							? new Date(punish.timestamp).setDate(new Date(punish.timestamp).getDate() + 7)
 							: new Date(punish.endTimestamp!).setDate(new Date(punish.endTimestamp!).getDate() + 30)
-				confirmEmbed.addField({
+				confirmEmbed.addFields({
 					name: `Case ${punish.case}: ${punish.endTimestamp ? durationString : ""}${punish.type} (${punish.points} points)`,
 					value: `${
 						typeof punish.duration === "number" ? (punish.duration ? `Ends <t:${Math.round(punish.endTimestamp! / 1000)}:R>\n` : "Never ends\n") : ""

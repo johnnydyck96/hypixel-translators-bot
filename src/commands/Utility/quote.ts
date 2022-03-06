@@ -177,7 +177,7 @@ async function findQuote(randomTip: string, interaction: ChatInputCommandInterac
 			},
 		})
 	if (quote.imageURL) embed.setImage(quote.imageURL)
-	if (quote.url) embed.addField({ name: getString("msgUrl"), value: quote.url })
+	if (quote.url) embed.addFields({ name: getString("msgUrl"), value: quote.url })
 	return await interaction.reply({ embeds: [embed] })
 }
 

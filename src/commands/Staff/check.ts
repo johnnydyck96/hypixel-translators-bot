@@ -62,7 +62,7 @@ const command: Command = {
 			thumbnail: { url: memberInput.displayAvatarURL({ extension: "png" }) },
 			footer: { text: generateTip(), iconURL: interaction.member.displayAvatarURL({ extension: "png" }) },
 		})
-		if (note) embed.addField({ name: "Note", value: note })
+		if (note) embed.addFields({ name: "Note", value: note })
 		await interaction.reply({ embeds: [embed] })
 	},
 }

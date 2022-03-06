@@ -89,7 +89,7 @@ const command: Command = {
 			})
 			pages.forEach(page => {
 				if (page.number === 0) return
-				page1.addField({
+				page1.addFields({
 					name: getString("pageNumber", { variables: { number: page.number, total: pages.length } }),
 					value: `${page.badge} ${getString(page.titleString)}`,
 					inline: true,
@@ -167,10 +167,10 @@ const command: Command = {
 			if (cmdDesc !== getString("inDev")) {
 				if (cmd.cooldown) {
 					if (cmd.cooldown >= 120)
-						embed.addField({ name: getString("cooldownField"), value: `${cmd.cooldown / 60} ${getString("minutes")}`, inline: true })
+						embed.addFields({ name: getString("cooldownField"), value: `${cmd.cooldown / 60} ${getString("minutes")}`, inline: true })
 					else if (cmd.cooldown === 1)
-						embed.addField({ name: getString("cooldownField"), value: `${cmd.cooldown} ${getString("second")}`, inline: true })
-					else embed.addField({ name: getString("cooldownField"), value: `${cmd.cooldown} ${getString("seconds")}`, inline: true })
+						embed.addFields({ name: getString("cooldownField"), value: `${cmd.cooldown} ${getString("second")}`, inline: true })
+					else embed.addFields({ name: getString("cooldownField"), value: `${cmd.cooldown} ${getString("seconds")}`, inline: true })
 				}
 			}
 			await interaction.reply({ embeds: [embed] })
@@ -201,7 +201,7 @@ function fetchPage(page: number, pages: Page[], getString: GetStringFunction, in
 					iconURL: ((interaction.member as GuildMember | null) ?? interaction.user).displayAvatarURL({ extension: "png" }),
 				},
 			})
-			pages[page].commands!.forEach(cmd => pageEmbed!.addField({ name: `\`/${cmd}\``, value: getString(`${cmd}.description`) }))
+			pages[page].commands!.forEach(cmd => pageEmbed!.addFields({ name: `\`/${cmd}\``, value: getString(`${cmd}.description`) }))
 		} else return console.error(`Help page ${page} has no embed fields specified!`)
 	} else return console.error(`Tried accessing help page ${page} but it doesn't exist in the pages array!`)
 

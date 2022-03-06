@@ -129,7 +129,7 @@ const command: Command = {
 				{ name: "Reason", value: interaction.options.getString("reason", true) },
 			],
 		})
-		if (extraInfo) embed.addField({ name: "Extra info", value: extraInfo })
+		if (extraInfo) embed.addFields({ name: "Extra info", value: extraInfo })
 		const doneRow = new ActionRow({
 			components: [
 				new ButtonComponent({

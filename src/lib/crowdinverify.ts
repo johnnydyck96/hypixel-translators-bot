@@ -327,7 +327,7 @@ export async function crowdinVerify(member: GuildMember, url?: string | null, se
 	})
 
 	if (Object.keys(endingMessageProjects).length)
-		for (const [k, v] of Object.entries(endingMessageProjects)) logEmbed.addField({ name: k, value: v.join(",\n") })
+		for (const [k, v] of Object.entries(endingMessageProjects)) logEmbed.addFields({ name: k, value: v.join(",\n") })
 
 	// Set the user's language based off of their highest role if this is a manual verification
 	if (sendDms) {
@@ -341,8 +341,8 @@ export async function crowdinVerify(member: GuildMember, url?: string | null, se
 		}
 	}
 
-	if (veteranRole) logEmbed.addField({ name: "Veteran role", value: `${veteranRole}` })
-	logEmbed.addField({ name: "Profile", value: url })
+	if (veteranRole) logEmbed.addFields({ name: "Veteran role", value: `${veteranRole}` })
+	logEmbed.addFields({ name: "Profile", value: url })
 
 	// #region return message
 	const dmEmbed = new Embed({

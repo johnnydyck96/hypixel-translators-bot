@@ -151,7 +151,7 @@ function fetchPage(page: number, pages: DbUser[][], getString: GetStringFunction
 		// Get the user if we ever decide to change that
 		// const user = interaction.client.users.cache.get(pages[page][i].id)!
 		if (pages[page][i].levels) {
-			pageEmbed.addField({
+			pageEmbed.addFields({
 				name: getString("level", {
 					variables: {
 						rank: i + 1 + page * 24,
@@ -163,7 +163,7 @@ function fetchPage(page: number, pages: DbUser[][], getString: GetStringFunction
 				inline: true,
 			})
 		} else {
-			pageEmbed.addField({
+			pageEmbed.addFields({
 				name: getString("unranked", { variables: { rank: i + 1 + page * 24 } }),
 				value: `<@!${pages[page][i].id}>${pages[page][i].id === interaction.user.id ? ` - **${getString("youIndicator")}**` : ""}`,
 				inline: true,

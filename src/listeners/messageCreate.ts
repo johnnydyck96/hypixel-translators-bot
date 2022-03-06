@@ -1,6 +1,5 @@
 import {
 	type BufferResolvable,
-	type GuildChannel,
 	type Message,
 	MessageComponentInteraction,
 	Embed,
@@ -11,6 +10,7 @@ import {
 	ButtonStyle,
 	ButtonComponent,
 	ActionRow,
+	type GuildTextBasedChannel,
 } from "discord.js"
 
 import { colors, ids } from "../config.json"
@@ -90,7 +90,7 @@ client.on("messageCreate", async message => {
 	client.channels.cache.filter(c => (c as TextChannel).name?.endsWith("review-strings")).forEach(c => noXpChannels.push(c.id))
 	if (
 		message.guild?.id === ids.guilds.main &&
-		!noXpChannels.includes((message.channel as GuildChannel).parentId!) &&
+		!noXpChannels.includes((message.channel as GuildTextBasedChannel).parentId!) &&
 		!noXpChannels.includes(message.channel.id!) &&
 		!message.member?.roles.cache.some(r => noXpRoles.includes(r.id))
 	)
