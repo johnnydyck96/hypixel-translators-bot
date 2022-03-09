@@ -101,7 +101,6 @@ const command: Command = {
 			// Determine which page to use
 			let pageEmbed = fetchPage(pageNum, pages, getString, interaction)!
 			const pageMenu = new ActionRow({
-					// TODO remove toJSON() because it's redundant but it's needed due to a typings error
 					components: [
 						new SelectMenuComponent({
 							customId: "page",
@@ -111,7 +110,7 @@ const command: Command = {
 								emoji: { name: p.badge },
 								default: p.number === pageNum,
 							})),
-						}).toJSON(),
+						}),
 					],
 				}),
 				msg = (await interaction.reply({ embeds: [pageEmbed], components: [pageMenu], fetchReply: true })) as Message,

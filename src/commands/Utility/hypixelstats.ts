@@ -304,8 +304,7 @@ const command: Command = {
 		}
 		const msg = (await interaction.editReply({
 				embeds: [embed],
-				// TODO remove toJSON() because it's redundant but it's needed due to a typings error
-				components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect.toJSON()] })],
+				components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect] })],
 			})) as Message,
 			collector = msg.createMessageComponentCollector<ComponentType.SelectMenu>({ idle: this.cooldown! * 1000 })
 
@@ -325,16 +324,14 @@ const command: Command = {
 			else if (option === "social") embed = social()
 			else if (option === "guild") embed = guild()!
 			optionsSelect.options.forEach(o => o.setDefault(option === o.value))
-			// TODO remove toJSON() because it's redundant but it's needed due to a typings error
-			await menuInteraction.update({ embeds: [embed], components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect.toJSON()] })] })
+			await menuInteraction.update({ embeds: [embed], components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect] })] })
 		})
 
 		collector.on("end", async () => {
 			optionsSelect.setDisabled(true)
 			await interaction.editReply({
 				content: getString("pagination.timeOut", { variables: { command: `\`/${this.name}\`` }, file: "global" }),
-				// TODO remove toJSON() because it's redundant but it's needed due to a typings error
-				components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect.toJSON()] })],
+				components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect] })],
 				embeds: [embed],
 			})
 		})
