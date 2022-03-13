@@ -7,7 +7,7 @@ import {
 	type ApplicationCommandPermissionData,
 	type ChatInputApplicationCommandData,
 	type GuildApplicationCommandPermissionData,
-	Embed,
+	EmbedBuilder,
 	type TextChannel,
 	ApplicationCommandPermissionType,
 	ActivityType,
@@ -141,7 +141,7 @@ export async function awaitMute(punishment: PunishmentLog) {
 		punishmentsColl = db.collection<PunishmentLog>("punishments"),
 		caseNumber = (await punishmentsColl.estimatedDocumentCount()) + 1,
 		user = await client.users.fetch(punishment.id),
-		punishmentLog = new Embed({
+		punishmentLog = new EmbedBuilder({
 			color: colors.success,
 			author: {
 				name: `Case ${caseNumber} | Unmute | ${user.tag}`,
@@ -182,7 +182,7 @@ export async function awaitMute(punishment: PunishmentLog) {
 			},
 		},
 	])
-	const dmEmbed = new Embed({
+	const dmEmbed = new EmbedBuilder({
 		color: colors.success,
 		author: { name: "Punishment" },
 		title: `Your mute on the ${guild.name} has expired.`,
@@ -203,7 +203,7 @@ export async function awaitBan(punishment: PunishmentLog) {
 			.remove(punishment.id!, "Punishment ended")
 			.catch(err => console.error(`Couldn't unban user with id ${punishment.id}. Here's the error:\n`, err)),
 		userFetched = await client.users.fetch(punishment.id).catch(() => null),
-		punishmentLog = new Embed({
+		punishmentLog = new EmbedBuilder({
 			color: colors.success,
 			author: {
 				name: `Case ${caseNumber} | Unban | ${userFetched?.tag ?? "Deleted User#0000"}`,
@@ -219,7 +219,7 @@ export async function awaitBan(punishment: PunishmentLog) {
 		})
 	if (!user) punishmentLog.setDescription("Couldn't unban user from the server.")
 	else {
-		const dmEmbed = new Embed({
+		const dmEmbed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: "Punishment" },
 			title: `Your ban on the ${guild.name} has expired.`,

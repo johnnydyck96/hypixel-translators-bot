@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Embed } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { client } from "../../index"
@@ -30,7 +30,7 @@ const command: Command = {
 			await updateRoles(memberInput)
 			const result = await collection.updateOne({ id: memberInput.id }, { $unset: { uuid: true } })
 			if (result.modifiedCount) {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: "Hypixel Verification" },
 					title: `Successfully unverified ${memberInput.user.tag}`,
@@ -38,7 +38,7 @@ const command: Command = {
 				})
 				return await interaction.reply({ embeds: [embed] })
 			} else {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: "Hypixel Verification" },
 					title: `Couldn't unverify ${memberInput.user.tag}!`,
@@ -52,7 +52,7 @@ const command: Command = {
 			client.cooldowns.get(this.name)!.delete(interaction.user.id)
 			const result = await collection.updateOne({ id: interaction.user.id }, { $unset: { uuid: true } })
 			if (result.modifiedCount) {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: getString("moduleName") },
 					title: getString("unverified"),
@@ -60,7 +60,7 @@ const command: Command = {
 				})
 				return await interaction.reply({ embeds: [embed] })
 			} else {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: getString("moduleName") },
 					title: getString("notUnverified"),

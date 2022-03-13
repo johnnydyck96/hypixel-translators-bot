@@ -1,4 +1,4 @@
-import { type GuildMember, ActionRow, ButtonComponent, Embed, ButtonStyle } from "discord.js"
+import { type GuildMember, ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -12,7 +12,7 @@ const command: Command = {
 	allowDM: true,
 	channelWhitelist: [ids.channels.bots, ids.channels.staffBots, ids.channels.botDev],
 	async execute(interaction, getString: GetStringFunction) {
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: getString("moduleName") },
 				title: getString("bugT"),
@@ -23,9 +23,9 @@ const command: Command = {
 					iconURL: ((interaction.member as GuildMember | null) ?? interaction.user).displayAvatarURL({ extension: "png" }),
 				},
 			}),
-			row = new ActionRow({
+			row = new ActionRowBuilder<ButtonBuilder>({
 				components: [
-					new ButtonComponent({
+					new ButtonBuilder({
 						style: ButtonStyle.Link,
 						label: getString("link"),
 						url: "https://github.com/Hypixel-Translators/hypixel-translators-bot/issues",

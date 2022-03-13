@@ -1,4 +1,4 @@
-import { GuildMember, Embed, Colors, ApplicationCommandOptionType } from "discord.js"
+import { GuildMember, EmbedBuilder, Colors, ApplicationCommandOptionType } from "discord.js"
 
 import { ids } from "../../config.json"
 import { db } from "../../lib/dbclient"
@@ -29,7 +29,7 @@ const command: Command = {
 		if (!modLog) throw `Couldn't find that case number! You must enter a number between 1 and ${await collection.estimatedDocumentCount()}`
 
 		const offender = interaction.guild!.members.cache.get(modLog.id) ?? (await interaction.client.users.fetch(modLog.id)),
-			embed = new Embed({
+			embed = new EmbedBuilder({
 				color: Colors.Blurple,
 				author: { name: "Punishment case" },
 				title: `Here's case #${caseNumber}`,

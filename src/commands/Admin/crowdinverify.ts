@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Embed } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import crowdinVerify from "../../events/crowdinverify"
@@ -24,7 +24,7 @@ const command: Command = {
 		await interaction.deferReply()
 		// eslint-disable-next-line no-undefined
 		await crowdinVerify(interaction.options.getInteger("limit", false) ?? undefined)
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: "Role updater" },
 			title: "All verified users had their roles updated!",

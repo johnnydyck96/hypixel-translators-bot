@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Embed } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { client } from "../../index"
@@ -30,7 +30,7 @@ const command: Command = {
 		const recipient = interaction.options.getUser("user", true),
 			recipientDb = await client.getUser(recipient.id),
 			message = interaction.options.getString("message", true).replaceAll("\\n", "\n"),
-			dm = new Embed({
+			dm = new EmbedBuilder({
 				color: colors.neutral,
 				author: getString("incoming", { lang: recipientDb.lang ?? "en" }),
 				description: message,
@@ -40,7 +40,7 @@ const command: Command = {
 		await recipient
 			.send({ embeds: [dm] })
 			.then(async () => {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: "Direct Message" },
 					title: `Sent message to ${recipient.tag}`,
@@ -50,7 +50,7 @@ const command: Command = {
 				await interaction.editReply({ embeds: [embed] })
 			})
 			.catch(async error => {
-				const errorEmbed = new Embed({
+				const errorEmbed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: "Direct Message" },
 					title: `An error occured while trying to message ${recipient.tag}`,

@@ -1,6 +1,6 @@
 import { setTimeout } from "node:timers/promises"
 
-import { Embed, ThreadChannel } from "discord.js"
+import { EmbedBuilder, ThreadChannel } from "discord.js"
 
 import { colors, ids } from "../config.json"
 import { client } from "../index"
@@ -52,7 +52,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 				} else await reaction.message.reactions.cache.get("⏱")?.remove()
 			} else if (reaction.emoji.name === "vote_maybe") {
 				await reaction.users.remove(user.id)
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 						color: colors.loading,
 						author: { name: strings.moduleName },
 						title: strings.requestDetails.replace("%%user%%", user.tag),
@@ -76,7 +76,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 				await statsColl.insertOne({ type: "STRINGS", user: user.id, name: "MORE_INFO" })
 			} else if (reaction.emoji.name === "vote_no") {
 				await reaction.message.react("⏱")
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: strings.moduleName },
 					title: strings.rejected.replace("%%user%%", user.tag),
@@ -136,7 +136,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 					imageURL: firstAttachment,
 				})
 			} else await collection.insertOne({ id: id, quote: reaction.message.content, author: [reaction.message.author.id], url: reaction.message.url })
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Starboard" },
 				title: `The following quote reached ${reaction.count} ⭐ reactions and was added!`,

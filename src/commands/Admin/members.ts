@@ -1,8 +1,8 @@
 import {
 	type GuildMember,
-	ActionRow,
-	ButtonComponent,
-	Embed,
+	ActionRowBuilder,
+	ButtonBuilder,
+	EmbedBuilder,
 	ApplicationCommandOptionType,
 	ButtonStyle,
 	Colors,
@@ -44,28 +44,28 @@ const command: Command = {
 		if (maxMembersArr.length > 1) {
 			let page = 0,
 				pageEmbed = updatePage(maxMembersArr[page], page + 1),
-				controlButtons = new ActionRow<ButtonComponent>({
+				controlButtons = new ActionRowBuilder<ButtonBuilder>({
 					components: [
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Secondary,
 							emoji: { name: "⏮️" },
 							customId: "first",
 							label: "First page",
 							disabled: true,
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "◀️" },
 							customId: "previous",
 							label: "Previous page",
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "▶️" },
 							customId: "next",
 							label: "Next page",
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Secondary,
 							emoji: { name: "⏭️" },
 							customId: "last",
@@ -109,7 +109,7 @@ const command: Command = {
 
 		function updatePage(membersArr: GuildMember[], page?: number) {
 			if (membersArr?.length) {
-				return new Embed({
+				return new EmbedBuilder({
 					color,
 					author: { name: "Members list" },
 					title: `Here are all the ${tags.length} members with the ${role.name} role on the server at the moment.`,
@@ -120,7 +120,7 @@ const command: Command = {
 					},
 				})
 			} else {
-				return new Embed({
+				return new EmbedBuilder({
 					color,
 					author: { name: "Members list" },
 					title: `There are no members with the ${role.name} role on the server at the moment.`,

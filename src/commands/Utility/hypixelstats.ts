@@ -2,10 +2,10 @@ import axios from "axios"
 import {
 	type GuildMember,
 	type Message,
-	Embed,
-	SelectMenuComponent,
+	EmbedBuilder,
+	SelectMenuBuilder,
 	ComponentType,
-	ActionRow,
+	ActionRowBuilder,
 	ApplicationCommandOptionType,
 	Colors,
 } from "discord.js"
@@ -131,7 +131,7 @@ const command: Command = {
 				if (playerJson.first_login) firstLogin = `<t:${Math.round(new Date(playerJson.first_login).getTime() / 1000)}:F>`
 				else firstLogin = getString("firstLoginHidden")
 
-				const statsEmbed = new Embed({
+				const statsEmbed = new EmbedBuilder({
 					color,
 					author: { name: getString("moduleName") },
 					title: `${rank} ${username}`,
@@ -209,7 +209,7 @@ const command: Command = {
 					if (!socialMedia.HYPIXEL.startsWith("https://")) forums = `[${getString("link")}](https://${socialMedia.HYPIXEL})`
 					else forums = `[${getString("link")}](${socialMedia.HYPIXEL})`
 				} else forums = getString("notConnected")
-				const socialEmbed = new Embed({
+				const socialEmbed = new EmbedBuilder({
 					color,
 					author: { name: getString("moduleName") },
 					title: `${rank} ${username}`,
@@ -234,7 +234,7 @@ const command: Command = {
 			guild = () => {
 				if (!guildJson.guild) return
 
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: color === 0xaaaaaa ? Colors.Blurple : color,
 					author: { name: getString("moduleName") },
 					title: `${guildJson.name}${guildJson.tag ? ` [${guildJson.tag.replace(/&[a-f0-9k-or]/gi, "")}]` : ""}`,
@@ -277,7 +277,7 @@ const command: Command = {
 
 		let embed = stats()
 
-		const optionsSelect = new SelectMenuComponent({
+		const optionsSelect = new SelectMenuBuilder({
 			customId: "statType",
 			options: [
 				{
@@ -304,7 +304,7 @@ const command: Command = {
 		}
 		const msg = (await interaction.editReply({
 				embeds: [embed],
-				components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect] })],
+				components: [new ActionRowBuilder<SelectMenuBuilder>({ components: [optionsSelect] })],
 			})) as Message,
 			collector = msg.createMessageComponentCollector<ComponentType.SelectMenu>({ idle: this.cooldown! * 1000 })
 
@@ -324,14 +324,14 @@ const command: Command = {
 			else if (option === "social") embed = social()
 			else if (option === "guild") embed = guild()!
 			optionsSelect.options.forEach(o => o.setDefault(option === o.value))
-			await menuInteraction.update({ embeds: [embed], components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect] })] })
+			await menuInteraction.update({ embeds: [embed], components: [new ActionRowBuilder<SelectMenuBuilder>({ components: [optionsSelect] })] })
 		})
 
 		collector.on("end", async () => {
 			optionsSelect.setDisabled(true)
 			await interaction.editReply({
 				content: getString("pagination.timeOut", { variables: { command: `\`/${this.name}\`` }, file: "global" }),
-				components: [new ActionRow<SelectMenuComponent>({ components: [optionsSelect] })],
+				components: [new ActionRowBuilder<SelectMenuBuilder>({ components: [optionsSelect] })],
 				embeds: [embed],
 			})
 		})

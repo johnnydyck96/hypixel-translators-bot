@@ -1,6 +1,6 @@
 import { setTimeout } from "node:timers/promises"
 
-import { ApplicationCommandOptionType, Embed, type TextChannel } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder, type TextChannel } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { client } from "../../index"
@@ -67,7 +67,7 @@ const command: Command = {
 			} else {
 				await interaction.member.roles.remove(ids.roles.verified, "Unverified")
 				await collection.updateOne({ id: interaction.member.id }, { $set: { unverifiedTimestamp: Date.now() } })
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: "Manual verification" },
 					title: "You were successfully unverified!",

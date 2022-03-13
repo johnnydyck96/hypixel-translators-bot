@@ -1,4 +1,4 @@
-import { type GuildMember, Embed, ApplicationCommandOptionType } from "discord.js"
+import { type GuildMember, EmbedBuilder, ApplicationCommandOptionType } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { client } from "../../index"
@@ -29,7 +29,7 @@ const command: Command = {
 			userDb = await client.getUser(user.id)
 
 		if (!userDb.levels) {
-			const errorEmbed = new Embed({
+			const errorEmbed = new EmbedBuilder({
 				color: colors.error,
 				author: { name: getString("moduleName") },
 				title: user.id === interaction.user.id ? getString("youNotRanked") : getString("userNotRanked"),
@@ -40,7 +40,7 @@ const command: Command = {
 		}
 		const totalXp = getXpNeeded(userDb.levels.level),
 			ranking = (await collection.find({}, { sort: { "levels.totalXp": -1, id: 1 } }).toArray()).map(u => u.id).indexOf(user.id) + 1,
-			embed = new Embed({
+			embed = new EmbedBuilder({
 				color: colors.neutral,
 				author: { name: getString("moduleName") },
 				title: user.id === interaction.user.id ? getString("yourRank") : getString("userRank", { variables: { user: user.tag } }),

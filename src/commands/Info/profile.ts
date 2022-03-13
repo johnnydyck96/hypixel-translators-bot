@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Embed } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { client } from "../../index"
@@ -33,7 +33,7 @@ const command: Command = {
 			if (!profile) {
 				const userDb = await client.getUser(user.id)
 				if (userDb.profile) {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.neutral,
 						author: { name: "Crowdin Profile" },
 						title: `Here's ${user.tag}'s Crowdin profile`,
@@ -42,7 +42,7 @@ const command: Command = {
 					})
 					return await interaction.reply({ embeds: [embed], ephemeral: true })
 				} else {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: "Crowdin Profile" },
 						title: `Couldn't find ${user.tag}'s Crowdin profile on the database!`,
@@ -53,7 +53,7 @@ const command: Command = {
 			} else if (/(https:\/\/)?(www\.)?crowdin\.com\/profile\/\S{1,}/gi.test(profile)) {
 				const result = await db.collection<DbUser>("users").findOneAndUpdate({ id: user.id }, { $set: { profile: profile } })
 				if (result.value!.profile !== profile) {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.success,
 						author: { name: "User Profile" },
 						title: `Successfully updated ${user.tag}'s Crowdin profile!`,
@@ -65,7 +65,7 @@ const command: Command = {
 					})
 					return await interaction.reply({ embeds: [embed], ephemeral: true })
 				} else {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: "User Profile" },
 						title: `Couldn't update ${user.tag}'s Crowdin profile!`,
@@ -79,7 +79,7 @@ const command: Command = {
 			const profileUser = await db.collection<DbUser>("users").findOne({ profile: profile })
 			if (profileUser) {
 				const userObject = await client.users.fetch(profileUser.id),
-					embed = new Embed({
+					embed = new EmbedBuilder({
 						color: colors.neutral,
 						author: { name: "Crowdin Profile" },
 						title: `That profile belongs to ${userObject.tag}`,
@@ -88,7 +88,7 @@ const command: Command = {
 					})
 				return await interaction.reply({ embeds: [embed], ephemeral: true })
 			} else {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.neutral,
 					author: { name: "Crowdin Profile" },
 					title: "Couldn't find a user with that profile!",
@@ -100,7 +100,7 @@ const command: Command = {
 			const randomTip = generateTip(getString),
 				userDb = await client.getUser(interaction.user.id)
 			if (userDb.profile) {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.neutral,
 					author: { name: getString("moduleName") },
 					title: getString("profileSuccess"),
@@ -109,7 +109,7 @@ const command: Command = {
 				})
 				return await interaction.reply({ embeds: [embed], ephemeral: true })
 			} else {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: getString("moduleName") },
 					title: getString("noProfile"),

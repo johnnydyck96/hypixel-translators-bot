@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, type GuildMember, Embed, type TextChannel, ApplicationCommandOptionType } from "discord.js"
+import { type ChatInputCommandInteraction, type GuildMember, EmbedBuilder, type TextChannel, ApplicationCommandOptionType } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { db } from "../../lib/dbclient"
@@ -143,7 +143,7 @@ async function findQuote(randomTip: string, interaction: ChatInputCommandInterac
 
 	const quote = await collection.findOne({ id: quoteId })
 	if (!quote) {
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.error,
 			author: { name: getString("moduleName") },
 			title: getString("invalidArg"),
@@ -166,7 +166,7 @@ async function findQuote(randomTip: string, interaction: ChatInputCommandInterac
 						.catch(() => "Deleted User#0000"),
 			),
 		),
-		embed = new Embed({
+		embed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: getString("moduleName") },
 			title: quote.quote,
@@ -194,7 +194,7 @@ async function addQuote(interaction: ChatInputCommandInteraction, collection: Co
 		if (urlSplit.length === 7) {
 			const msg = await (interaction.client.channels.cache.get(urlSplit[5]) as TextChannel | undefined)?.messages.fetch(urlSplit[6]).catch(() => null)
 			if (!msg) {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: "Quote" },
 					title: "Couldn't find a message linked to that URL!",
@@ -207,7 +207,7 @@ async function addQuote(interaction: ChatInputCommandInteraction, collection: Co
 				return await interaction.reply({ embeds: [embed], ephemeral: true })
 			}
 			if (msg.attachments.size > 0) pictureUrl ??= msg.attachments.first()!.url
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Quote" },
 				title: "Success! The following quote has been added:",
@@ -228,7 +228,7 @@ async function addQuote(interaction: ChatInputCommandInteraction, collection: Co
 			} else await collection.insertOne({ id: quoteId, quote: quote, author: [author.id], url: url! })
 			await interaction.reply({ embeds: [embed] })
 		} else {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.error,
 				author: { name: "Quote" },
 				title: "Provided URL isn't a valid message URL!",
@@ -240,7 +240,7 @@ async function addQuote(interaction: ChatInputCommandInteraction, collection: Co
 			return await interaction.reply({ embeds: [embed], ephemeral: true })
 		}
 	} else {
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: "Quote" },
 			title: "Success! The following quote has been added:",
@@ -278,7 +278,7 @@ async function editQuote(interaction: ChatInputCommandInteraction, collection: C
 							.catch(() => "Deleted User#0000"),
 				),
 			),
-			embed = new Embed({
+			embed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Quote" },
 				title: `Successfully edited quote #${quoteId}`,
@@ -296,7 +296,7 @@ async function editQuote(interaction: ChatInputCommandInteraction, collection: C
 		if (result.value.imageURL) embed.setImage(result.value.imageURL)
 		await interaction.reply({ embeds: [embed] })
 	} else {
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.error,
 			author: { name: "Quote" },
 			title: "Couldn't find a quote with that ID!",
@@ -325,7 +325,7 @@ async function deleteQuote(interaction: ChatInputCommandInteraction, collection:
 			),
 		)
 		await collection.updateMany({ id: { $gt: quoteId } }, { $inc: { id: -1 } })
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: "Quote" },
 			title: `Successfully deleted quote #${quoteId}`,
@@ -342,7 +342,7 @@ async function deleteQuote(interaction: ChatInputCommandInteraction, collection:
 		if (result.value.imageURL) embed.setImage(result.value.imageURL)
 		await interaction.reply({ embeds: [embed] })
 	} else {
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.error,
 			author: { name: "Quote" },
 			title: "Couldn't find a quote with that ID!",
@@ -361,7 +361,7 @@ async function linkQuote(interaction: ChatInputCommandInteraction, collection: C
 		linkAttch = interaction.options.getBoolean("attachment", false),
 		msg = await (interaction.client.channels.cache.get(urlSplit[5]) as TextChannel | undefined)?.messages.fetch(urlSplit[6]).catch(() => null)
 	if (!msg) {
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.error,
 			author: { name: "Quote" },
 			title: "Couldn't find a message linked to that URL!",
@@ -388,7 +388,7 @@ async function linkQuote(interaction: ChatInputCommandInteraction, collection: C
 							.catch(() => "Deleted User#0000"),
 				),
 			),
-			embed = new Embed({
+			embed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Quote" },
 				title: `Successfully linked quote #${quoteId}`,
@@ -407,7 +407,7 @@ async function linkQuote(interaction: ChatInputCommandInteraction, collection: C
 		else if (result.value.imageURL) embed.setImage(result.value.imageURL)
 		await interaction.reply({ embeds: [embed] })
 	} else {
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.error,
 			author: { name: "Quote" },
 			title: "Couldn't find a quote with that ID!",

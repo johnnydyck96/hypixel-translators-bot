@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ChannelType, Embed, type TextChannel } from "discord.js"
+import { ApplicationCommandOptionType, ChannelType, EmbedBuilder, type TextChannel } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { updateProjectStatus } from "../../events/stats"
@@ -40,7 +40,7 @@ const command: Command = {
 		if (!channel) throw "Couldn't resolve that channel!"
 		await interaction.deferReply()
 		for (let i = amount; i > 0; i--) await channel.send("Language statistics will be here shortly!")
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: "Bulk Send" },
 			title: `Success! Message${amount === 1 ? "" : "s"} sent!`,

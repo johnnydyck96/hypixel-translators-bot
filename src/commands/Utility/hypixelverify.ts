@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ApplicationCommandOptionType, Embed } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { db, type DbUser } from "../../lib/dbclient"
@@ -59,7 +59,7 @@ const command: Command = {
 			const result = await collection.updateOne({ id: interaction.user.id }, { $set: { uuid: json.uuid } }),
 				role = await updateRoles(interaction.member, json)
 			if (result.modifiedCount) {
-				const successEmbed = new Embed({
+				const successEmbed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: getString("moduleName") },
 					title: getString("success", { variables: { player: json.username } }),
@@ -68,7 +68,7 @@ const command: Command = {
 				})
 				await interaction.editReply({ embeds: [successEmbed] })
 			} else {
-				const notChanged = new Embed({
+				const notChanged = new EmbedBuilder({
 					color: colors.error,
 					author: { name: getString("moduleName") },
 					title: getString("alreadyVerified"),
@@ -81,7 +81,7 @@ const command: Command = {
 			const result = await collection.updateOne({ id: memberInput.id }, { $set: { uuid: json.uuid } }),
 				role = await updateRoles(memberInput, json)
 			if (result.modifiedCount) {
-				const successEmbed = new Embed({
+				const successEmbed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: "Hypixel Verification" },
 					title: `Successfully verified ${memberInput.user.tag} as ${json.username}`,
@@ -94,7 +94,7 @@ const command: Command = {
 				})
 				await interaction.editReply({ embeds: [successEmbed] })
 			} else {
-				const notChanged = new Embed({
+				const notChanged = new EmbedBuilder({
 					color: colors.error,
 					author: { name: "Hypixel Verification" },
 					title: "This user is already verified",
@@ -103,7 +103,7 @@ const command: Command = {
 				await interaction.editReply({ embeds: [notChanged] })
 			}
 		} else {
-			const errorEmbed = new Embed({
+			const errorEmbed = new EmbedBuilder({
 				color: colors.error,
 				author: { name: getString("moduleName") },
 				title: getString("error"),

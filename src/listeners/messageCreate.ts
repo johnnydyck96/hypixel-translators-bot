@@ -2,14 +2,14 @@ import {
 	type BufferResolvable,
 	type Message,
 	MessageComponentInteraction,
-	Embed,
+	EmbedBuilder,
 	TextChannel,
 	Util,
 	ComponentType,
 	MessageType,
 	ButtonStyle,
-	ButtonComponent,
-	ActionRow,
+	ButtonBuilder,
+	ActionRowBuilder,
 	type GuildTextBasedChannel,
 } from "discord.js"
 
@@ -115,7 +115,7 @@ client.on("messageCreate", async message => {
 			const langFix = message.content.replace(/translate\.hypixel\.net/gi, "crowdin.com").replace(/\/en-(?!en#)[a-z]{2,4}/gi, "/en-en")
 			if (!/(?:\?[\w\d%&=$+!*'()-]*)?#\d+/gi.test(message.content)) {
 				await message.react("vote_no:839262184882044931")
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: getGlobalString("errors.wrongLink") },
 					title: getGlobalString("wrongStringURL"),
@@ -141,7 +141,7 @@ client.on("messageCreate", async message => {
 				await message.react("vote_no:839262184882044931")
 				await db.collection<Stats>("stats").insertOne({ type: "MESSAGE", name: "badLink", user: message.author.id })
 				const correctLink = langFix.match(stringURLRegex)![0],
-					embed = new Embed({
+					embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: getGlobalString("errors.wrongLink") },
 						title: getGlobalString("linkCorrectionDesc", { variables: { extension: "`crowdin.com/translate/hypixel/.../en-en#`" } }),
@@ -165,15 +165,15 @@ client.on("messageCreate", async message => {
 	if (message.author !== client.user && message.channel.isDMBased()) {
 		if (!message.content && message.stickers.size >= 0 && message.attachments.size === 0) return // We don't need stickers being sent to us
 		const staffBots = client.channels.cache.get(ids.channels.staffBots) as TextChannel,
-			controlButtons = new ActionRow({
+			controlButtons = new ActionRowBuilder<ButtonBuilder>({
 				components: [
-					new ButtonComponent({
+					new ButtonBuilder({
 						style: ButtonStyle.Success,
 						customId: "confirm",
 						emoji: { name: "✅" },
 						label: getGlobalString("pagination.confirm"),
 					}),
-					new ButtonComponent({
+					new ButtonBuilder({
 						style: ButtonStyle.Danger,
 						customId: "cancel",
 						emoji: { name: "❎" },
@@ -182,7 +182,7 @@ client.on("messageCreate", async message => {
 				],
 			})
 		if (!author.staffMsgTimestamp || author.staffMsgTimestamp + 48 * 60 * 60 * 1000 < message.createdTimestamp) {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.neutral,
 				title: getGlobalString("staffDm.confirmation"),
 				description: message.content,
@@ -210,7 +210,7 @@ client.on("messageCreate", async message => {
 			collector.on("end", async (_, reason) => {
 				if (reason === "responded") return
 				controlButtons.components.forEach(button => button.setDisabled(true))
-				const timeOutEmbed = new Embed({
+				const timeOutEmbed = new EmbedBuilder({
 					color: colors.error,
 					author: getGlobalString("staffDm.dmCancelled"),
 					description: message.content,
@@ -225,12 +225,12 @@ client.on("messageCreate", async message => {
 			await db
 				.collection<DbUser>("users")
 				.updateOne({ id: message.author.id }, { $set: { staffMsgTimestamp: afterConfirm ? Date.now() : message.createdTimestamp } })
-			const staffMsg = new Embed({
+			const staffMsg = new EmbedBuilder({
 					color: colors.neutral,
 					author: { name: `Incoming message from ${message.author.tag}` },
 					description: message.content,
 				}),
-				dmEmbed = new Embed({
+				dmEmbed = new EmbedBuilder({
 					color: colors.success,
 					author: getGlobalString("staffDm.messageSent"),
 					description: message.content,

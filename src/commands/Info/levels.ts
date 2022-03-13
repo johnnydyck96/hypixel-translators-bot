@@ -2,9 +2,9 @@ import {
 	type ChatInputCommandInteraction,
 	type GuildMember,
 	type Message,
-	ActionRow,
-	ButtonComponent,
-	Embed,
+	ActionRowBuilder,
+	ButtonBuilder,
+	EmbedBuilder,
 	ButtonStyle,
 	ComponentType,
 	ApplicationCommandOptionType,
@@ -53,7 +53,7 @@ const command: Command = {
 		else if (inputPage) page = inputPage - 1
 
 		if (page >= pages.length || page < 0) {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.error,
 				author: { name: getString("moduleName") },
 				title: getString("pageTitle"),
@@ -65,27 +65,27 @@ const command: Command = {
 			})
 			return await interaction.reply({ embeds: [embed] })
 		} else {
-			let controlButtons = new ActionRow<ButtonComponent>({
+			let controlButtons = new ActionRowBuilder<ButtonBuilder>({
 					components: [
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "⏮️" },
 							customId: "first",
 							label: getString("pagination.first", { file: "global" }),
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "◀️" },
 							customId: "previous",
 							label: getString("pagination.previous", { file: "global" }),
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "▶️" },
 							customId: "next",
 							label: getString("pagination.next", { file: "global" }),
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "⏭️" },
 							customId: "last",
@@ -138,7 +138,7 @@ const command: Command = {
 function fetchPage(page: number, pages: DbUser[][], getString: GetStringFunction, interaction: ChatInputCommandInteraction) {
 	if (page > pages.length - 1) page = pages.length - 1
 	if (page < 0) page = 0
-	const pageEmbed = new Embed({
+	const pageEmbed = new EmbedBuilder({
 		color: colors.neutral,
 		author: { name: getString("moduleName") },
 		title: getString("pageTitle"),

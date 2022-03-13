@@ -1,4 +1,4 @@
-import { Constants, Formatters, type GuildTextBasedChannel, Embed, ApplicationCommandOptionType } from "discord.js"
+import { Constants, Formatters, type GuildTextBasedChannel, EmbedBuilder, ApplicationCommandOptionType } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -34,7 +34,7 @@ const command: Command = {
 
 		if (interaction.member.permissions.has("ManageRoles")) await sendTo.send(message)
 		else await sendTo.send(Formatters.blockQuote(message))
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: "Message" },
 			title: "Success! Message sent.",

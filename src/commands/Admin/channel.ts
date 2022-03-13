@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, type ChatInputCommandInteraction, Colors, Embed, type TextChannel } from "discord.js"
+import { ApplicationCommandOptionType, type ChatInputCommandInteraction, Colors, EmbedBuilder, type TextChannel } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -31,7 +31,7 @@ const command: Command = {
 		await interaction.deferReply()
 		if (channelInput === "info") {
 			await info(interaction)
-			const successEmbed = new Embed({
+			const successEmbed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Channel updater" },
 				title: "Updated the information channel!",
@@ -41,7 +41,7 @@ const command: Command = {
 			await interaction.editReply({ embeds: [successEmbed] })
 		} else if (channelInput === "rules") {
 			await rules(interaction)
-			const successEmbed = new Embed({
+			const successEmbed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Channel updater" },
 				title: "Updated the rules channel!",
@@ -51,7 +51,7 @@ const command: Command = {
 			await interaction.editReply({ embeds: [successEmbed] })
 		} else if (channelInput === "verify") {
 			await verify(interaction)
-			const successEmbed = new Embed({
+			const successEmbed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Channel updater" },
 				title: "Updated the verification channel!",
@@ -63,7 +63,7 @@ const command: Command = {
 			await info(interaction)
 			await verify(interaction)
 			await rules(interaction)
-			const successEmbed = new Embed({
+			const successEmbed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Channel updater" },
 				title: "Updated all channels!",
@@ -78,7 +78,7 @@ const command: Command = {
 async function info(interaction: ChatInputCommandInteraction<"cached">) {
 	const serverInfo = interaction.client.channels.cache.get(ids.channels.serverInfo) as TextChannel,
 		channelsMessage = await serverInfo.messages.fetch("800415708851732491"),
-		channelsEmbed = new Embed({
+		channelsEmbed = new EmbedBuilder({
 			color: 0x0022ff,
 			title: "Channels",
 			description: "Each channel has important information pinned in it. We highly recommend checking it out.",
@@ -105,7 +105,7 @@ async function info(interaction: ChatInputCommandInteraction<"cached">) {
 		})
 	await channelsMessage.edit({ content: null, embeds: [channelsEmbed] })
 
-	const botsEmbed = new Embed({
+	const botsEmbed = new EmbedBuilder({
 		color: 0x0055ff,
 		title: "Bots",
 		description: `Information about all bots on this server can be found here. They all support slash commands, so you can type \`/\` in <#${ids.channels.bots}> to see all their commands.`,
@@ -123,7 +123,7 @@ async function info(interaction: ChatInputCommandInteraction<"cached">) {
 	})
 	await serverInfo.messages.edit("800415710508744744", { content: null, embeds: [botsEmbed] })
 
-	const rolesEmbed = new Embed({
+	const rolesEmbed = new EmbedBuilder({
 		color: 0x0077ff,
 		title: "Roles",
 		description: "Every role has a meaning behind it. Find out what they all are below!",
@@ -158,7 +158,7 @@ async function info(interaction: ChatInputCommandInteraction<"cached">) {
 }
 
 async function rules(interaction: ChatInputCommandInteraction<"cached">) {
-	const rulesEmbed = new Embed({
+	const rulesEmbed = new EmbedBuilder({
 		color: Colors.Blurple,
 		title: "Server Rules",
 		description:
@@ -213,7 +213,7 @@ async function rules(interaction: ChatInputCommandInteraction<"cached">) {
 }
 
 async function verify(interaction: ChatInputCommandInteraction<"cached">) {
-	const verifyEmbed = new Embed({
+	const verifyEmbed = new EmbedBuilder({
 		color: Colors.Blurple,
 		author: { name: "Welcome!" },
 		thumbnail: { url: interaction.guild.iconURL({ extension: "png" })! },

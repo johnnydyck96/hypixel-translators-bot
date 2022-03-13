@@ -3,9 +3,9 @@ import { setTimeout } from "node:timers/promises"
 import {
 	type ButtonInteraction,
 	type GuildMember,
-	ActionRow,
-	ButtonComponent,
-	Embed,
+	ActionRowBuilder,
+	ButtonBuilder,
+	EmbedBuilder,
 	type TextChannel,
 	type User,
 	ComponentType,
@@ -141,16 +141,16 @@ const command: Command = {
 			points = interaction.options.getInteger("points", false) as PunishmentPoints | null,
 			duration = interaction.options.getNumber("duration", false),
 			punishment = await calculatePunishment(user, points ?? 1),
-			buttons = new ActionRow({
+			buttons = new ActionRowBuilder<ButtonBuilder>({
 				components: [
-					new ButtonComponent({
+					new ButtonBuilder({
 						style: ButtonStyle.Success,
 						customId: "confirm",
 						label: "Confirm",
 						emoji: { name: "✅" },
 						disabled: true,
 					}),
-					new ButtonComponent({
+					new ButtonBuilder({
 						style: ButtonStyle.Danger,
 						customId: "cancel",
 						label: "Cancel",
@@ -181,7 +181,7 @@ const command: Command = {
 			// Apply the punishment
 			if (punishment.type === "VERBAL") {
 				if (!memberInput) throw "Couldn't find that member! Are you sure they're on the server?"
-				const punishmentLog = new Embed({
+				const punishmentLog = new EmbedBuilder({
 						color: colors.error,
 						author: {
 							name: `Case ${caseNumber} | Verbal Warning | ${points} point${points === 1 ? "" : "s"}`,
@@ -207,7 +207,7 @@ const command: Command = {
 					moderator: interaction.user.id,
 					logMsg: msg.id,
 				} as PunishmentLog)
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: "Punishments" },
 					title: "Successfully registered this verbal warning!",
@@ -221,7 +221,7 @@ const command: Command = {
 				await interaction.editReply({ embeds: [embed] })
 			} else if (punishment.type === "WARN") {
 				if (!memberInput) throw "Couldn't find that member! Are you sure they're on the server?"
-				const confirmEmbed = new Embed({
+				const confirmEmbed = new EmbedBuilder({
 						color: colors.loading,
 						author: { name: "Punishments" },
 						title: `Are you sure you want to warn ${user.tag}?`,
@@ -235,7 +235,7 @@ const command: Command = {
 				await interaction.editReply({ components: [buttons] })
 				const buttonInteraction = await confirmMsg.awaitMessageComponent<ComponentType.Button>({ filter, time: 65_000 }).catch(() => null)
 				if (!buttonInteraction) {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: "Punishments" },
 						title: "You didn't respond in time, so this user wasn't warned",
@@ -247,7 +247,7 @@ const command: Command = {
 				if (buttonInteraction.customId === "confirm") {
 					await buttonInteraction.deferUpdate()
 
-					const punishmentLog = new Embed({
+					const punishmentLog = new EmbedBuilder({
 							color: colors.error,
 							author: {
 								name: `Case ${caseNumber} | Warning | ${points} point${points === 1 ? "" : "s"}`,
@@ -273,14 +273,14 @@ const command: Command = {
 						moderator: interaction.user.id,
 						logMsg: msg.id,
 					} as PunishmentLog)
-					const dmEmbed = new Embed({
+					const dmEmbed = new EmbedBuilder({
 							color: colors.error,
 							author: { name: "Punishment" },
 							title: `You have been warned on the ${interaction.guild!.name}`,
 							description: `**Reason:** ${reason}`,
 							timestamp: Date.now(),
 						}),
-						embed = new Embed({
+						embed = new EmbedBuilder({
 							color: colors.success,
 							author: { name: "Punishments" },
 							title: "Successfully warned this member!",
@@ -300,7 +300,7 @@ const command: Command = {
 							await buttonInteraction.editReply({ embeds: [embed], components: [] })
 						})
 				} else if (buttonInteraction.customId === "cancel") {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.success,
 						author: { name: "Punishments" },
 						title: "Successfully cancelled this punishment",
@@ -309,7 +309,7 @@ const command: Command = {
 					await buttonInteraction.update({ embeds: [embed], components: [] })
 				}
 			} else if (punishment.type === "MUTE") {
-				const confirmEmbed = new Embed({
+				const confirmEmbed = new EmbedBuilder({
 						color: colors.loading,
 						author: { name: "Punishments" },
 						title: "Are you sure you want to mute this member?",
@@ -323,7 +323,7 @@ const command: Command = {
 				await interaction.editReply({ components: [buttons] })
 				const buttonInteraction = await confirmMsg.awaitMessageComponent<ComponentType.Button>({ filter, time: 65_000 }).catch(() => null)
 				if (!buttonInteraction) {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: "Punishments" },
 						title: "You didn't respond in time, so this user wasn't muted",
@@ -335,7 +335,7 @@ const command: Command = {
 				if (buttonInteraction.customId === "confirm") {
 					await buttonInteraction.deferUpdate()
 					const endTimestamp = new Date().setHours(new Date().getHours() + punishment.duration!),
-						punishmentLog = new Embed({
+						punishmentLog = new EmbedBuilder({
 							color: colors.error,
 							author: {
 								name: `Case ${caseNumber} | Mute | ${points} point${points === 1 ? "" : "s"}`,
@@ -371,7 +371,7 @@ const command: Command = {
 					if (memberInput.moderatable) await memberInput.disableCommunicationUntil(endTimestamp, `${reason} | ${interaction.user.tag}`)
 					else throw "I cannot mute that member!"
 
-					const dmEmbed = new Embed({
+					const dmEmbed = new EmbedBuilder({
 							color: colors.error,
 							author: { name: "Punishment" },
 							title: `You have been muted on the ${interaction.guild!.name} for ${punishment.duration} hours`,
@@ -380,7 +380,7 @@ const command: Command = {
 							)}:R>)`,
 							timestamp: Date.now(),
 						}),
-						embed = new Embed({
+						embed = new EmbedBuilder({
 							color: colors.success,
 							author: { name: "Punishments" },
 							title: "Successfully muted this member!",
@@ -402,7 +402,7 @@ const command: Command = {
 						})
 					awaitMute(punishmentDb)
 				} else if (buttonInteraction.customId === "cancel") {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.success,
 						author: { name: "Punishments" },
 						title: "Successfully cancelled this punishment",
@@ -411,7 +411,7 @@ const command: Command = {
 					await buttonInteraction.update({ embeds: [embed], components: [] })
 				}
 			} else if (punishment.type === "BAN") {
-				const confirmEmbed = new Embed({
+				const confirmEmbed = new EmbedBuilder({
 						color: colors.loading,
 						author: { name: "Punishments" },
 						title: "Are you sure you want to ban this member?",
@@ -429,7 +429,7 @@ const command: Command = {
 				await interaction.editReply({ components: [buttons] })
 				const buttonInteraction = await confirmMsg.awaitMessageComponent<ComponentType.Button>({ filter, time: 65_000 }).catch(() => null)
 				if (!buttonInteraction) {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: "Punishments" },
 						title: "You didn't respond in time, so this user wasn't banned",
@@ -446,7 +446,7 @@ const command: Command = {
 					else throw "I cannot ban that member!"
 
 					const endTimestamp = punishment.duration ? new Date().setDate(new Date().getDate() + punishment.duration) : 0,
-						punishmentLog = new Embed({
+						punishmentLog = new EmbedBuilder({
 							color: colors.error,
 							author: {
 								name: `Case ${caseNumber} | Ban | ${points} point${points === 1 ? "" : "s"}`,
@@ -504,7 +504,7 @@ const command: Command = {
 							.then(result => collection.findOne({ _id: result.insertedId })))!
 					}
 
-					const dmEmbed = new Embed({
+					const dmEmbed = new EmbedBuilder({
 							color: colors.error,
 							author: { name: "Punishments" },
 							title: `You have been ${punishment.duration ? "" : "permanently "}banned from the ${interaction.guild!.name} ${
@@ -517,7 +517,7 @@ const command: Command = {
 							}`,
 							timestamp: Date.now(),
 						}),
-						embed = new Embed({
+						embed = new EmbedBuilder({
 							color: colors.success,
 							author: { name: "Punishments" },
 							title: "Successfully banned this member!",
@@ -543,7 +543,7 @@ const command: Command = {
 						})
 					awaitBan(punishmentDb)
 				} else if (buttonInteraction.customId === "cancel") {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.success,
 						author: { name: "Punishments" },
 						title: "Successfully cancelled this punishment",
@@ -559,7 +559,7 @@ const command: Command = {
 				activePoints += punish.points ?? 0
 			})
 
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: activePoints ? colors.error : colors.success,
 				author: { name: "Punishments" },
 				title: `${user.tag} currently has ${activePoints} point${activePoints === 1 ? "" : "s"}.`,
@@ -586,7 +586,7 @@ const command: Command = {
 			const hasPermission = checkPermissions(interaction.member, punishment),
 				unexpiredPunishments = await getActivePunishments(user),
 				durationString = punishment.duration ? `${punishment.duration}${punishment.type === "BAN" ? "d" : "h"} ` : "permanent ",
-				embed = new Embed({
+				embed = new EmbedBuilder({
 					color: hasPermission ? colors.success : colors.error,
 					author: { name: "Punishments" },
 					title: `Giving this member ${points} points will result in a ${["MUTE", "BAN"].includes(punishment.type) ? durationString : ""}${
@@ -625,7 +625,7 @@ const command: Command = {
 					ephemeral: true,
 				})
 			} else if (!activePunishments.length) throw "This user has no active punishments!"
-			const confirmEmbed = new Embed({
+			const confirmEmbed = new EmbedBuilder({
 				color: colors.loading,
 				author: { name: "Punishments" },
 				title: `Are you sure you want to revoke ${user.tag}'s active ${activePunishments[0].type}?`,
@@ -654,7 +654,7 @@ const command: Command = {
 			await interaction.editReply({ components: [buttons] })
 			const buttonInteraction = await confirmMsg.awaitMessageComponent<ComponentType.Button>({ filter, time: 65_000 }).catch(() => null)
 			if (!buttonInteraction) {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: "Punishments" },
 					title: "You didn't respond in time, so this user's punishments weren't revoked",
@@ -665,7 +665,7 @@ const command: Command = {
 			}
 			if (buttonInteraction.customId === "confirm") {
 				await buttonInteraction.deferUpdate()
-				const punishmentLog = new Embed({
+				const punishmentLog = new EmbedBuilder({
 						color: colors.success,
 						author: {
 							name: `Case ${caseNumber} | ${activePunishments[0].type === "BAN" ? "Unban" : "Unmute"} | ${user.tag}`,
@@ -703,14 +703,14 @@ const command: Command = {
 					},
 				])
 
-				const dmEmbed = new Embed({
+				const dmEmbed = new EmbedBuilder({
 						color: colors.success,
 						author: { name: "Punishments" },
 						title: `You have been un${activePunishments[0].type === "BAN" ? "banned" : "muted"} from the ${interaction.guild!.name}`,
 						description: `**Reason:** ${reason}`,
 						timestamp: Date.now(),
 					}),
-					embed = new Embed({
+					embed = new EmbedBuilder({
 						color: colors.success,
 						author: { name: "Punishments" },
 						title: "Successfully revoked this member's punishment!",
@@ -741,7 +741,7 @@ const command: Command = {
 						})
 				} else await buttonInteraction.editReply({ embeds: [embed], components: [] })
 			} else if (buttonInteraction.customId === "cancel") {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: "Punishments" },
 					title: "Successfully cancelled revoking this punishment",

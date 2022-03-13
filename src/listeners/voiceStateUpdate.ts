@@ -1,4 +1,4 @@
-import { Embed, type TextChannel } from "discord.js"
+import { EmbedBuilder, type TextChannel } from "discord.js"
 
 import { ids } from "../config.json"
 import { client } from "../index"
@@ -17,7 +17,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 
 		if (!!oldState.serverMute !== !!newState.serverMute) {
 			// Convert to boolean to prevent null !== false from triggering the condition
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: newState.serverMute ? errorColor : successColor,
 				author: {
 					name: newState.member!.user.tag,
@@ -29,7 +29,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 			})
 			await logs.send({ embeds: [embed] })
 		} else if (!!oldState.serverDeaf !== !!newState.serverDeaf) {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: newState.serverDeaf ? errorColor : successColor,
 				author: { name: newState.member!.user.tag, iconURL: newState.member!.displayAvatarURL({ extension: "png" }) },
 				description: `**${newState.member} was server ${newState.serverDeaf ? "deafened" : "undeafened"} in ${newState.channel?.name}**`,

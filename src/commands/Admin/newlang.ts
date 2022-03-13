@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ChannelType, Embed, type OverwriteResolvable } from "discord.js"
+import { ApplicationCommandOptionType, ChannelType, EmbedBuilder, type OverwriteResolvable } from "discord.js"
 import { getLanguage } from "language-flag-colors"
 
 import { colors, ids } from "../../config.json"
@@ -134,7 +134,7 @@ const command: Command = {
 				permissionOverwrites: pfOverwrites,
 				reason: `Added language ${language.name}`,
 			}),
-			embed = new Embed({
+			embed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Channel creator" },
 				title: `Successfully created the new ${country} category, channels and roles!`,

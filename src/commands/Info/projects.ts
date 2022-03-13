@@ -1,4 +1,4 @@
-import { Embed } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -34,7 +34,7 @@ const command: Command = {
 		if (member.roles.cache.find(role => role.name === "Bot Translator" || role.name === "Bot Proofreader" || role.name === "Bot Manager"))
 			joinedBot = `<:vote_yes:839262196797669427> **${getString("alreadyJoined")}**`
 		else joinedBot = `<:vote_no:839262184882044931> **${getString("notJoined")}**`
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.neutral,
 			author: { name: getString("moduleName") },
 			title: getString("allProjects"),

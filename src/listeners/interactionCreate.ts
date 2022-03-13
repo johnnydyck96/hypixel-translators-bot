@@ -2,7 +2,7 @@ import process from "node:process"
 // Cannot use promisified setTimeout here
 import { setTimeout } from "node:timers"
 
-import { Collection, Formatters, GuildChannel, type Message, Embed, type TextChannel } from "discord.js"
+import { Collection, Formatters, GuildChannel, type Message, EmbedBuilder, type TextChannel } from "discord.js"
 
 import { colors, ids } from "../config.json"
 import { client } from "../index"
@@ -63,7 +63,7 @@ client.on("interactionCreate", async interaction => {
 		if (now < expirationTime) {
 			await statsColl.insertOne({ type: "COMMAND", name: command.name, user: interaction.user.id, error: true, errorMessage: "cooldown" })
 
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.error,
 				author: { name: getString("cooldown", { file: "global" }) },
 				title: getString("timeLeft", {
@@ -161,7 +161,7 @@ client.on("interactionCreate", async interaction => {
 		// Send error to bot-dev channel
 		if (error.stack) {
 			if (process.env.NODE_ENV === "production") {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: "Unexpected error!" },
 					title: error.toString().substring(0, 255),
@@ -186,7 +186,7 @@ client.on("interactionCreate", async interaction => {
 
 		// Handle errors
 		timestamps.delete(interaction.user.id)
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.error,
 			author: { name: getString("error", { file: "global" }) },
 			title: (error.message ?? error).substring(0, 255),

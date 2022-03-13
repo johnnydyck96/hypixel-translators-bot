@@ -2,9 +2,9 @@ import axios from "axios"
 import {
 	type GuildMember,
 	type Message,
-	ActionRow,
-	ButtonComponent,
-	Embed,
+	ActionRowBuilder,
+	ButtonBuilder,
+	EmbedBuilder,
 	ComponentType,
 	ButtonStyle,
 	ApplicationCommandOptionType,
@@ -96,27 +96,27 @@ const command: Command = {
 
 				if (pages.length === 1) await interaction.editReply({ embeds: [fetchPage(0)] })
 				else {
-					let controlButtons = new ActionRow<ButtonComponent>({
+					let controlButtons = new ActionRowBuilder<ButtonBuilder>({
 							components: [
-								new ButtonComponent({
+								new ButtonBuilder({
 									style: ButtonStyle.Success,
 									customId: "first",
 									emoji: { name: "⏮️" },
 									label: getString("pagination.first", { file: "global" }),
 								}),
-								new ButtonComponent({
+								new ButtonBuilder({
 									style: ButtonStyle.Success,
 									customId: "previous",
 									emoji: { name: "◀️" },
 									label: getString("pagination.previous", { file: "global" }),
 								}),
-								new ButtonComponent({
+								new ButtonBuilder({
 									style: ButtonStyle.Success,
 									customId: "next",
 									emoji: { name: "▶️" },
 									label: getString("pagination.next", { file: "global" }),
 								}),
-								new ButtonComponent({
+								new ButtonBuilder({
 									style: ButtonStyle.Success,
 									customId: "last",
 									emoji: { name: "⏭️" },
@@ -167,7 +167,7 @@ const command: Command = {
 				}
 
 				function fetchPage(page: number) {
-					return new Embed({
+					return new EmbedBuilder({
 						color: colors.success,
 						author: { name: getString("moduleName") },
 						title: getString("history.nameHistoryFor", { variables: { username } }),
@@ -200,7 +200,7 @@ const command: Command = {
 
 				break
 			case "skin":
-				const skinEmbed = new Embed({
+				const skinEmbed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: getString("moduleName") },
 					title: isOwnUser ? getString("skin.yourSkin") : getString("skin.userSkin", { variables: { user: (await getPlayer(uuid)).name } }),

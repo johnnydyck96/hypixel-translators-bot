@@ -1,4 +1,4 @@
-import { ActionRow, ApplicationCommandOptionType, ButtonComponent, ButtonStyle, Colors, ComponentType, Embed } from "discord.js"
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, Colors, ComponentType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { db } from "../../lib/dbclient"
@@ -29,7 +29,7 @@ const command: Command = {
 			randomTip = generateTip()
 
 		if (!modlogs.length) {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: Colors.Blurple,
 				author: { name: "Modlogs" },
 				title: `Couldn't find any modlogs for ${userInput.tag}`,
@@ -37,7 +37,7 @@ const command: Command = {
 			})
 			await interaction.reply({ embeds: [embed] })
 		} else if (modlogs.length === 1) {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Log message", url: `https://discord.com/channels/${ids.guilds.main}/${ids.channels.punishments}/${modlogs[0].logMsg}` },
 				title: `Found 1 modlog for ${userInput.tag}`,
@@ -47,35 +47,35 @@ const command: Command = {
 			updateModlogFields(embed, modlogs[0])
 			await interaction.reply({ embeds: [embed] })
 		} else {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: "Log message", url: `https://discord.com/channels/${ids.guilds.main}/${ids.channels.punishments}/${modlogs[0].logMsg}` },
 					title: `Found ${modlogs.length} modlogs for ${userInput.tag}`,
 					description: `Case #${modlogs[0].case}`,
 					footer: { text: randomTip, iconURL: interaction.member.displayAvatarURL({ extension: "png" }) },
 				}),
-				controlButtons = new ActionRow<ButtonComponent>({
+				controlButtons = new ActionRowBuilder<ButtonBuilder>({
 					components: [
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Secondary,
 							emoji: { name: "⏮️" },
 							customId: "first",
 							label: "First log",
 							disabled: true,
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "◀️" },
 							customId: "previous",
 							label: "Previous log",
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							emoji: { name: "▶️" },
 							customId: "next",
 							label: "Next log",
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Secondary,
 							emoji: { name: "⏭️" },
 							customId: "last",

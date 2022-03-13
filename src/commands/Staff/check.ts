@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Colors, Embed } from "discord.js"
+import { ApplicationCommandOptionType, Colors, EmbedBuilder } from "discord.js"
 
 import { ids } from "../../config.json"
 import { client } from "../../index"
@@ -49,7 +49,7 @@ const command: Command = {
 				.join(", ")
 		} else userRoles = "No roles yet!"
 
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color,
 			author: { name: "User information", iconURL: memberInput.user.displayAvatarURL({ extension: "png" }) },
 			title: memberInput.user.tag,

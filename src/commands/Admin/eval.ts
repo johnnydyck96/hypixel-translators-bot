@@ -63,7 +63,7 @@ const command: Command = {
 		try {
 			evaled = await eval(compiledCode)
 			const inspected = inspect(evaled, { depth: 1, getters: true }),
-				embed = new discord.Embed({
+				embed = new discord.EmbedBuilder({
 					color: colors.success,
 					author: { name: "Evaluation" },
 					title: "The code was executed successfully! Here's the output",
@@ -88,7 +88,7 @@ const command: Command = {
 			await interaction.editReply({ embeds: [embed] })
 			console.log(evaled)
 		} catch (error) {
-			const embed = new discord.Embed({
+			const embed = new discord.EmbedBuilder({
 				color: colors.error,
 				author: { name: "Evaluation" },
 				title: "An error occured while executing that code. Here's the error stack",

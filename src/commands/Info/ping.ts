@@ -1,4 +1,4 @@
-import { type GuildMember, Embed } from "discord.js"
+import { type GuildMember, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -24,7 +24,7 @@ const command: Command = {
 		else if (ping <= 400) color = colors.loading
 		else color = colors.error
 
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color,
 			author: { name: getString("moduleName") },
 			title: getString("pong", { variables: { pingEmote: "<:ping:620954198493888512>" } }),

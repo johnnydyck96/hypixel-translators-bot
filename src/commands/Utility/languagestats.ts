@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Embed } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { client, crowdin } from "../../index"
@@ -71,7 +71,7 @@ const command: Command = {
 		else if (approvalProgress >= 50) color = colors.loading
 		else color = colors.error
 
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color,
 			thumbnail: { url: lang.flag },
 			author: { name: getString("moduleName") },

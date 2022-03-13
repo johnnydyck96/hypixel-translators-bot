@@ -1,4 +1,4 @@
-import { type EmbedFieldData, Embed, Colors, ApplicationCommandOptionType } from "discord.js"
+import { type EmbedFieldData, EmbedBuilder, Colors, ApplicationCommandOptionType } from "discord.js"
 
 import { ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -35,7 +35,7 @@ const command: Command = {
 				}
 			} else if (role.tags.premiumSubscriberRole) tags = { name: "Premium Subscriber Role", value: "True", inline: true }
 		}
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: role.color || Colors.Blurple,
 			thumbnail: { url: role.iconURL({ extension: "png", size: 4096 }) ?? "" },
 			author: { name: "Role information" },

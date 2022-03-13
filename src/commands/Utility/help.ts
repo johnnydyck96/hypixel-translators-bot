@@ -4,9 +4,9 @@ import {
 	type ChatInputCommandInteraction,
 	type GuildMember,
 	type Message,
-	ActionRow,
-	Embed,
-	SelectMenuComponent,
+	ActionRowBuilder,
+	EmbedBuilder,
+	SelectMenuBuilder,
 	Colors,
 	ComponentType,
 	ApplicationCommandOptionType,
@@ -75,7 +75,7 @@ const command: Command = {
 			let pageNum = 0
 			if (pageInput) pageNum = pageInput
 
-			const page1 = new Embed({
+			const page1 = new EmbedBuilder({
 				color: Colors.Blurple,
 				author: { name: getString("moduleName") },
 				title: `${pages[0].badge} ${getString("mainPage")}`,
@@ -100,9 +100,9 @@ const command: Command = {
 
 			// Determine which page to use
 			let pageEmbed = fetchPage(pageNum, pages, getString, interaction)!
-			const pageMenu = new ActionRow({
+			const pageMenu = new ActionRowBuilder<SelectMenuBuilder>({
 					components: [
-						new SelectMenuComponent({
+						new SelectMenuBuilder({
 							customId: "page",
 							options: pages.map(p => ({
 								label: getString(p.titleString),
@@ -130,7 +130,7 @@ const command: Command = {
 					})
 				} else pageNum = Number(option)
 				pageEmbed = fetchPage(pageNum, pages, getString, interaction)!
-				;(pageMenu.components[0] as SelectMenuComponent).options.forEach(o => o.setDefault(option === o.value))
+				pageMenu.components[0].options.forEach(o => o.setDefault(option === o.value))
 				await menuInteraction.update({ embeds: [pageEmbed], components: [pageMenu] })
 			})
 
@@ -156,7 +156,7 @@ const command: Command = {
 
 			if (cmd.dev && !member?.roles.cache.has(ids.roles.staff)) cmdDesc = getString("inDev")
 
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: Colors.Blurple,
 				author: { name: getString("moduleName") },
 				title: `${getString("commandInfoFor")}\`/${cmd.name}\``,
@@ -180,12 +180,12 @@ const command: Command = {
 function fetchPage(page: number, pages: Page[], getString: GetStringFunction, interaction: ChatInputCommandInteraction) {
 	if (page > pages.length - 1) page = pages.length - 1
 	if (page < 0) page = 0
-	let pageEmbed: Embed
+	let pageEmbed: EmbedBuilder
 
 	if (pages[page]) {
 		if (pages[page].embed) pageEmbed = pages[page].embed!
 		else if (pages[page].commands) {
-			pageEmbed = new Embed({
+			pageEmbed = new EmbedBuilder({
 				color: Colors.Blurple,
 				author: { name: getString("moduleName") },
 				title: `${pages[page].badge} ${getString(pages[page].titleString!)}`,
@@ -212,7 +212,7 @@ interface Page {
 	commands?: string[]
 	badge: string
 	titleString: string
-	embed?: Embed
+	embed?: EmbedBuilder
 }
 
 export default command

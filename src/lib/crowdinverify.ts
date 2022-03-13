@@ -1,6 +1,6 @@
 import { setTimeout } from "node:timers/promises"
 
-import { type GuildMember, Embed, type Role, type TextChannel, Colors } from "discord.js"
+import { type GuildMember, EmbedBuilder, type Role, type TextChannel, Colors } from "discord.js"
 
 import { db, type DbUser } from "./dbclient"
 import { closeConnection, getBrowser, type MongoLanguage, type Stats } from "./util"
@@ -32,7 +32,7 @@ const projectIDs: {
 export async function crowdinVerify(member: GuildMember, url?: string | null, sendDms = false, sendLogs = true) {
 	const verifyLogs = member.client.channels.cache.get(ids.channels.verifyLogs) as TextChannel,
 		verify = member.client.channels.cache.get(ids.channels.verify) as TextChannel,
-		errorEmbed = new Embed({
+		errorEmbed = new EmbedBuilder({
 			color: colors.error,
 			author: { name: "Received message from staff" },
 			footer: { text: "Any messages you send here will be sent to staff upon confirmation." },
@@ -164,14 +164,14 @@ export async function crowdinVerify(member: GuildMember, url?: string | null, se
 			await statsColl.insertOne({ type: "VERIFY", name: verifyType, user: member.id, error: true, errorMessage: "privateProfile" })
 			// #endregion
 		} else {
-			const dmEmbed = new Embed({
+			const dmEmbed = new EmbedBuilder({
 					color: Colors.Blurple,
 					author: { name: "Received message from staff" },
 					description:
 						"Hey there!\nYou have successfully verified your Crowdin account!\nSadly you didn't receive any roles because you don't translate for any of the projects we currently support.\nWhen you have started translating you can refresh your roles by running `/verify`\nIf you wanna know more about all the projects we currently support, run `/projects` here.",
 					footer: { text: "Any messages you send here will be sent to staff upon confirmation." },
 				}),
-				logEmbed = new Embed({
+				logEmbed = new EmbedBuilder({
 					color: Colors.Blurple,
 					title: `${member.user.tag} is now verified!`,
 					description: `${member} has not received any roles. They do not translate for any of the projects.`,
@@ -318,7 +318,7 @@ export async function crowdinVerify(member: GuildMember, url?: string | null, se
 		})
 	}
 
-	const logEmbed = new Embed({
+	const logEmbed = new EmbedBuilder({
 		color: Colors.Blurple,
 		title: `${member.user.tag} is now verified!`,
 		description: Object.keys(endingMessageProjects).length
@@ -345,7 +345,7 @@ export async function crowdinVerify(member: GuildMember, url?: string | null, se
 	logEmbed.addFields({ name: "Profile", value: url })
 
 	// #region return message
-	const dmEmbed = new Embed({
+	const dmEmbed = new EmbedBuilder({
 		color: Colors.Blurple,
 		author: { name: "Received message from staff" },
 		description: `Hey there!\nYou have successfully verified your Crowdin account${

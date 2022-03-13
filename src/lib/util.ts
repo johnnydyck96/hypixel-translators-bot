@@ -7,9 +7,9 @@ import axios from "axios"
 import {
 	type ChatInputCommandInteraction,
 	type GuildMember,
-	ActionRow,
-	ButtonComponent,
-	Embed,
+	ActionRowBuilder,
+	ButtonBuilder,
+	EmbedBuilder,
 	type NewsChannel,
 	type Role,
 	type Snowflake,
@@ -293,7 +293,7 @@ export function transformDiscordLocale(discordLocale: string): string {
 	else return "en"
 }
 
-export function updateButtonColors(row: ActionRow<ButtonComponent>, page: number, pages: unknown[]) {
+export function updateButtonColors(row: ActionRowBuilder<ButtonBuilder>, page: number, pages: unknown[]) {
 	if (page === 0) {
 		row.components.forEach(button => {
 			if (button.customId === "first" || button.customId === "previous") button.setStyle(ButtonStyle.Secondary).setDisabled(true)
@@ -309,7 +309,7 @@ export function updateButtonColors(row: ActionRow<ButtonComponent>, page: number
 	return row
 }
 
-export function updateModlogFields(embed: Embed, modlog: PunishmentLog, modlogs?: PunishmentLog[]) {
+export function updateModlogFields(embed: EmbedBuilder, modlog: PunishmentLog, modlogs?: PunishmentLog[]) {
 	embed.setAuthor({ name: "Log message", url: `https://discord.com/channels/${ids.guilds.main}/${ids.channels.punishments}/${modlog.logMsg}` })
 	const expireTimestamp =
 		modlog.type === "VERBAL"

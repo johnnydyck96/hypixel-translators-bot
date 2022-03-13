@@ -1,4 +1,4 @@
-import { Embed } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -16,7 +16,7 @@ const command: Command = {
 			member = interaction.client.guilds.cache.get("549503328472530974")!.members.resolve(interaction.user.id)!
 
 		if (member.roles.cache.find(role => role.name.startsWith("Bot ") && role.name !== "Bot Updates")) {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.neutral,
 				author: { name: getString("moduleName") },
 				title: getString("alreadyTranslator"),
@@ -29,7 +29,7 @@ const command: Command = {
 			})
 			await interaction.reply({ embeds: [embed] })
 		} else {
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.neutral,
 				author: { name: getString("moduleName") },
 				title: getString("newTranslator"),

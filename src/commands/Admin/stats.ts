@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Embed } from "discord.js"
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { stats, updateProjectStatus } from "../../events/stats"
@@ -32,7 +32,7 @@ const command: Command = {
 			await stats(true).catch(err => {
 				throw err
 			})
-			const allEmbed = new Embed({
+			const allEmbed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Statistics updater" },
 				title: "All statistics channels have been updated!",
@@ -47,7 +47,7 @@ const command: Command = {
 		} else {
 			await updateProjectStatus(ids.projects[projectInput])
 
-			const projectEmbed = new Embed({
+			const projectEmbed = new EmbedBuilder({
 				color: colors.success,
 				author: { name: "Statistics updater" },
 				title: `The ${projectInput} language statistics have been updated!`,

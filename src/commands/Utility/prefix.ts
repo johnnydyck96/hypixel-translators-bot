@@ -1,4 +1,4 @@
-import { ActionRow, ButtonComponent, Embed, type TextChannel, ButtonStyle, ApplicationCommandOptionType, ComponentType } from "discord.js"
+import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, type TextChannel, ButtonStyle, ApplicationCommandOptionType, ComponentType } from "discord.js"
 import { getEmoji } from "language-flag-colors"
 
 import { colors, ids } from "../../config.json"
@@ -52,7 +52,7 @@ const command: Command = {
 			if (!flagEmojis.length || flagEmojis.includes(null)) throw "falseFlag"
 
 			const prefix = flagEmojis.join("-"),
-				confirmEmbed = new Embed({
+				confirmEmbed = new EmbedBuilder({
 					color: colors.neutral,
 					author: { name: getString("moduleName") },
 					title: getString("caution"),
@@ -60,15 +60,15 @@ const command: Command = {
 					fields: [{ name: getString("previewT"), value: `\`[${prefix}] ${nickNoPrefix}\`` }],
 					footer: { text: randomTip, iconURL: interaction.member.displayAvatarURL({ extension: "png" }) },
 				}),
-				confirmButtons = new ActionRow({
+				confirmButtons = new ActionRowBuilder<ButtonBuilder>({
 					components: [
-						new ButtonComponent({
+						new ButtonBuilder({
 							customId: "confirm",
 							style: ButtonStyle.Success,
 							label: getString("pagination.confirm", { file: "global" }),
 							emoji: { name: "✅" },
 						}),
-						new ButtonComponent({
+						new ButtonBuilder({
 							customId: "cancel",
 							style: ButtonStyle.Danger,
 							label: getString("pagination.cancel", { file: "global" }),
@@ -98,7 +98,7 @@ const command: Command = {
 						await interaction.member
 							.setNickname(`[${prefix}] ${nickNoPrefix}`, "Used the prefix command")
 							.then(async () => {
-								const embed = new Embed({
+								const embed = new EmbedBuilder({
 									color: colors.success,
 									author: { name: getString("moduleName") },
 									title: getString("saved"),
@@ -106,7 +106,7 @@ const command: Command = {
 									footer: { text: randomTip, iconURL: interaction.member.displayAvatarURL({ extension: "png" }) },
 								})
 								await interaction.editReply({ embeds: [embed], components: [confirmButtons] })
-								const staffAlert = new Embed({
+								const staffAlert = new EmbedBuilder({
 									color: colors.loading,
 									author: { name: "Prefix" },
 									title: "A user manually changed their prefix",
@@ -116,7 +116,7 @@ const command: Command = {
 								await (interaction.client.channels.cache.get(ids.channels.staffBots) as TextChannel).send({ embeds: [staffAlert] })
 							})
 							.catch(async err => {
-								const embed = new Embed({
+								const embed = new EmbedBuilder({
 									color: colors.error,
 									author: { name: getString("moduleName") },
 									title: getString("errors.error"),
@@ -128,7 +128,7 @@ const command: Command = {
 								console.log(err.stack ?? err)
 							})
 					} else {
-						const embed = new Embed({
+						const embed = new EmbedBuilder({
 							color: colors.success,
 							author: { name: getString("moduleName") },
 							title: getString("errors.alreadyThis") + getString("errors.notSaved"),
@@ -138,7 +138,7 @@ const command: Command = {
 						await interaction.editReply({ embeds: [embed], components: [confirmButtons] })
 					}
 				} else if (buttonInteraction.customId === "cancel") {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: getString("moduleName") },
 						title: getString("errors.cancelled") + getString("errors.notSaved"),
@@ -155,7 +155,7 @@ const command: Command = {
 						await interaction.member
 							.setNickname(`[${prefix}] ${nickNoPrefix}`, "Used the prefix command")
 							.then(async () => {
-								const embed = new Embed({
+								const embed = new EmbedBuilder({
 									color: colors.success,
 									author: { name: getString("moduleName") },
 									title: getString("saved"),
@@ -165,7 +165,7 @@ const command: Command = {
 								await interaction.editReply({ embeds: [embed], components: [confirmButtons] })
 							})
 							.catch(async err => {
-								const embed = new Embed({
+								const embed = new EmbedBuilder({
 									color: colors.error,
 									author: { name: getString("moduleName") },
 									title: getString("errors.error"),
@@ -177,7 +177,7 @@ const command: Command = {
 								console.log(err.stack ?? err)
 							})
 					} else {
-						const embed = new Embed({
+						const embed = new EmbedBuilder({
 							color: colors.success,
 							author: { name: getString("moduleName") },
 							title: getString("errors.alreadyThis") + getString("errors.notSaved"),
@@ -187,7 +187,7 @@ const command: Command = {
 						await interaction.editReply({ embeds: [embed], components: [confirmButtons] })
 					}
 				} else {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: getString("moduleName") },
 						title: getString("errors.timedOut"),
@@ -213,24 +213,24 @@ const command: Command = {
 			userLangs = userLangs.reverse()
 			const prefixButtons = userLangs.map(
 					entry =>
-						new ButtonComponent({
+						new ButtonBuilder({
 							style: ButtonStyle.Success,
 							customId: entry.code,
 							emoji: { name: entry.emoji },
 						}),
 				),
-				components: ButtonComponent[][] = []
+				components: ButtonBuilder[][] = []
 			let p = 0
 			while (p < prefixButtons.length) components.push(prefixButtons.slice(p, (p += 5)))
 			components.push([
-				new ButtonComponent({
+				new ButtonBuilder({
 					style: ButtonStyle.Success,
 					customId: "confirm",
 					emoji: { name: "✅" },
 					label: getString("pagination.confirm", { file: "global" }),
 					disabled: true,
 				}),
-				new ButtonComponent({
+				new ButtonBuilder({
 					style: ButtonStyle.Danger,
 					customId: "cancel",
 					emoji: { name: "❎" },
@@ -244,7 +244,7 @@ const command: Command = {
 					interaction.member.roles.cache.find(role => role.name.startsWith("Bot ") && role.id !== ids.roles.botUpdates) ||
 					interaction.member.roles.cache.find(role => role.name.startsWith("SkyblockAddons "))
 				) {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: getString("moduleName") },
 						title: getString("errors.trNoRoles"),
@@ -254,7 +254,7 @@ const command: Command = {
 					client.cooldowns.get(this.name)!.delete(interaction.user.id)
 					return void (await interaction.editReply({ embeds: [embed] }))
 				} else {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: getString("moduleName") },
 						title: getString("errors.noLanguages"),
@@ -264,7 +264,7 @@ const command: Command = {
 					return void (await interaction.editReply({ embeds: [embed] }))
 				}
 			}
-			const noChangesEmbed = new Embed({
+			const noChangesEmbed = new EmbedBuilder({
 					color: colors.neutral,
 					author: { name: getString("moduleName") },
 					title: getString("react"),
@@ -301,7 +301,7 @@ const command: Command = {
 							await interaction.member
 								.setNickname(`[${prefixes}] ${nickNoPrefix}`, "Used the prefix command")
 								.then(async () => {
-									const embed = new Embed({
+									const embed = new EmbedBuilder({
 										color: colors.success,
 										author: { name: getString("moduleName") },
 										title: getString("saved"),
@@ -311,7 +311,7 @@ const command: Command = {
 									await buttonInteraction.update({ embeds: [embed], components: rows })
 								})
 								.catch(async err => {
-									const embed = new Embed({
+									const embed = new EmbedBuilder({
 										color: colors.error,
 										author: { name: getString("moduleName") },
 										title: getString("errors.error"),
@@ -323,7 +323,7 @@ const command: Command = {
 									console.log(err.stack ?? err)
 								})
 						} else {
-							const embed = new Embed({
+							const embed = new EmbedBuilder({
 								color: colors.error,
 								author: { name: getString("moduleName") },
 								title: getString("errors.alreadyThis") + getString("errors.notSaved"),
@@ -332,7 +332,7 @@ const command: Command = {
 							await buttonInteraction.update({ embeds: [embed], components: rows })
 						}
 					} else {
-						const embed = new Embed({
+						const embed = new EmbedBuilder({
 							color: colors.error,
 							author: { name: getString("moduleName") },
 							title: getString("errors.confirmedNoFlags") + getString("errors.notSaved"),
@@ -343,7 +343,7 @@ const command: Command = {
 				} else if (buttonInteraction.customId === "cancel") {
 					components.forEach(buttons => buttons.forEach(button => button.setDisabled()))
 					collector.stop("responded")
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: getString("moduleName") },
 						title: getString("errors.cancelled") + getString("errors.notSaved"),
@@ -360,7 +360,7 @@ const command: Command = {
 							?.setDisabled()
 							.setStyle(ButtonStyle.Secondary),
 					)
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.neutral,
 						author: { name: getString("moduleName") },
 						title: getString("react"),
@@ -380,7 +380,7 @@ const command: Command = {
 						interaction.member
 							.setNickname(`[${prefixes}] ${nickNoPrefix}`, "Used the prefix command")
 							.then(async () => {
-								const embed = new Embed({
+								const embed = new EmbedBuilder({
 									color: colors.success,
 									author: { name: getString("moduleName") },
 									title: getString("saved"),
@@ -390,7 +390,7 @@ const command: Command = {
 								await interaction.editReply({ embeds: [embed], components: rows })
 							})
 							.catch(async err => {
-								const embed = new Embed({
+								const embed = new EmbedBuilder({
 									color: colors.error,
 									author: { name: getString("moduleName") },
 									title: getString("errors.error"),
@@ -402,7 +402,7 @@ const command: Command = {
 								console.log(err.stack ?? err)
 							})
 					} else {
-						const embed = new Embed({
+						const embed = new EmbedBuilder({
 							color: colors.success,
 							author: { name: getString("moduleName") },
 							title: getString("errors.alreadyThis") + getString("errors.notSaved"),
@@ -412,7 +412,7 @@ const command: Command = {
 						await interaction.editReply({ embeds: [embed], components: rows })
 					}
 				} else {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.error,
 						author: { name: getString("moduleName") },
 						title: getString("errors.timedOut"),

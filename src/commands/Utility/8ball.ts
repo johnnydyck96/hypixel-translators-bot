@@ -1,4 +1,4 @@
-import { type GuildMember, Embed, ApplicationCommandOptionType } from "discord.js"
+import { type GuildMember, EmbedBuilder, ApplicationCommandOptionType } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { generateTip } from "../../lib/util"
@@ -24,7 +24,7 @@ const command: Command = {
 			answerType = keys[(keys.length * Math.random()) << 0] as "positive" | "inconclusive" | "negative",
 			answers = getString(`answers.${answerType}`),
 			color = answerType === "positive" ? colors.success : answerType === "inconclusive" ? colors.loading : colors.error,
-			embed = new Embed({
+			embed = new EmbedBuilder({
 				color,
 				author: { name: getString("moduleName") },
 				title: answers[Math.floor(Math.random() * answers.length)],

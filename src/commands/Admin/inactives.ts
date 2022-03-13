@@ -1,4 +1,4 @@
-import { Embed } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import inactives from "../../events/inactives"
@@ -14,7 +14,7 @@ const command: Command = {
 		if (!interaction.inCachedGuild()) return
 
 		await inactives()
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: colors.success,
 			author: { name: "Inactive checker" },
 			title: "All inactive members have been notified!",

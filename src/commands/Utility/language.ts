@@ -1,6 +1,6 @@
 import { access, constants, readdir, readdirSync } from "node:fs"
 
-import { type GuildMember, Embed, ApplicationCommandOptionType } from "discord.js"
+import { type GuildMember, EmbedBuilder, ApplicationCommandOptionType } from "discord.js"
 
 import { colors, ids } from "../../config.json"
 import { db, type DbUser } from "../../lib/dbclient"
@@ -72,7 +72,7 @@ const command: Command = {
 				else languageString = getString(element)
 				langList.push(getString("listElement", { variables: { code: element, language: languageString ?? "Unknown" } }))
 				if (index === array.length - 1) {
-					const embed = new Embed({
+					const embed = new EmbedBuilder({
 						color: colors.neutral,
 						author: { name: getString("moduleName") },
 						title: getString("listTitle"),
@@ -89,7 +89,7 @@ const command: Command = {
 			const langUsers = await collection.find({ lang: language }).toArray(),
 				users: string[] = []
 			langUsers.forEach(u => users.push(`<@!${u.id}>`))
-			const embed = new Embed({
+			const embed = new EmbedBuilder({
 				color: colors.neutral,
 				author: { name: "Language" },
 				title: `There ${langUsers.length === 1 ? `is ${langUsers.length} user` : `are ${langUsers.length} users`} using that language at the moment.`,
@@ -110,7 +110,7 @@ const command: Command = {
 						const result = await collection.updateOne({ id: interaction.user.id }, { $set: { lang: language } })
 						if (result.modifiedCount) {
 							randomTip = generateTip(getString, language)
-							const embed = new Embed({
+							const embed = new EmbedBuilder({
 								color: colors.success,
 								author: { name: getString("moduleName", { lang: language }) },
 								title: getString("changedToTitle", { lang: language }),
@@ -119,7 +119,7 @@ const command: Command = {
 							})
 							return await interaction.reply({ embeds: [embed] })
 						} else {
-							const embed = new Embed({
+							const embed = new EmbedBuilder({
 								color: colors.error,
 								author: { name: getString("moduleName", { lang: language }) },
 								title: getString("didntChange", { lang: language }),
@@ -129,7 +129,7 @@ const command: Command = {
 							return await interaction.reply({ embeds: [embed] })
 						}
 					} else {
-						const embed = new Embed({
+						const embed = new EmbedBuilder({
 							color: colors.error,
 							author: { name: getString("moduleName") },
 							title: getString("didntChange"),
@@ -142,7 +142,7 @@ const command: Command = {
 					readdir(stringsFolder, async (_err, files) => {
 						const emptyIndex = files.indexOf("empty")
 						if (~emptyIndex && !member?.roles.cache.has(ids.roles.admin)) files.splice(emptyIndex, 1)
-						const embed = new Embed({
+						const embed = new EmbedBuilder({
 							color: colors.error,
 							author: { name: getString("moduleName") },
 							title: getString("errorTitle"),
@@ -158,7 +158,7 @@ const command: Command = {
 				newLanguage = transformDiscordLocale(interaction.locale) // This is because now that language is not set, we can try to get the locale from discord
 			if (result.modifiedCount) {
 				randomTip = generateTip(getString, newLanguage)
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.success,
 					author: { name: getString("moduleName", { lang: newLanguage }) },
 					title: getString("resetTitle", { lang: newLanguage }),
@@ -167,7 +167,7 @@ const command: Command = {
 				})
 				await interaction.reply({ embeds: [embed] })
 			} else {
-				const embed = new Embed({
+				const embed = new EmbedBuilder({
 					color: colors.error,
 					author: { name: getString("moduleName", { lang: newLanguage }) },
 					title: getString("didntChange", { lang: newLanguage }),

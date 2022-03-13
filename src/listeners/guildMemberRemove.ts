@@ -1,4 +1,4 @@
-import { Formatters, Embed, type TextChannel } from "discord.js"
+import { Formatters, EmbedBuilder, type TextChannel } from "discord.js"
 
 import { colors, ids } from "../config.json"
 import { client } from "../index"
@@ -33,7 +33,7 @@ client.on("guildMemberRemove", async member => {
 	}
 	if (!member.user!.bot) {
 		const oldData = await db.collection<DbUser>("users").findOneAndDelete({ id: member.id }),
-			embed = new Embed({
+			embed = new EmbedBuilder({
 				color: colors.error,
 				author: { name: "Member Left", iconURL: member.displayAvatarURL({ extension: "png" }) },
 				description: `${member} (${member.user.tag}) just left the server. Here's their DB data:\n\n${Formatters.codeBlock(

@@ -1,4 +1,4 @@
-import { ActionRow, ApplicationCommandOptionType, ButtonComponent, ButtonStyle, Colors, Embed, type TextChannel } from "discord.js"
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type TextChannel } from "discord.js"
 
 import { ids } from "../../config.json"
 
@@ -119,7 +119,7 @@ const command: Command = {
 		else if (endDate.getTime() <= yesterday.getTime() || startDate.getTime() <= yesterday.getTime())
 			return await interaction.reply({ content: "The end and start date must both be after yesterday!", ephemeral: true })
 
-		const embed = new Embed({
+		const embed = new EmbedBuilder({
 			color: Colors.Blurple,
 			author: { name: interaction.user.tag, iconURL: interaction.member.displayAvatarURL() },
 			title: `${interaction.member.displayName} is going away for some time!`,
@@ -130,9 +130,9 @@ const command: Command = {
 			],
 		})
 		if (extraInfo) embed.addFields({ name: "Extra info", value: extraInfo })
-		const doneRow = new ActionRow({
+		const doneRow = new ActionRowBuilder<ButtonBuilder>({
 			components: [
-				new ButtonComponent({
+				new ButtonBuilder({
 					style: ButtonStyle.Success,
 					label: "End LOA",
 					emoji: { name: "✅" },
